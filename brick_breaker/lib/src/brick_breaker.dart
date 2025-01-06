@@ -22,6 +22,7 @@ class BrickBreaker extends FlameGame
           ),
         );
 
+  final ValueNotifier<int> score = ValueNotifier(0); // Add this line
   final rand = math.Random();
   double get width => size.x;
   double get height => size.y;
@@ -49,6 +50,7 @@ class BrickBreaker extends FlameGame
     camera.viewfinder.anchor = Anchor.topLeft;
 
     world.add(PlayArea());
+
     playState = PlayState.welcome;
   }
 
@@ -60,9 +62,10 @@ class BrickBreaker extends FlameGame
     world.removeAll(world.children.query<Brick>());
 
     playState = PlayState.playing;
+    score.value = 0; // Add this line
 
     world.add(Ball(
-        difficultyModifier: difficultyModifier, // Add this argument
+        difficultyModifier: difficultyModifier,
         radius: ballRadius,
         position: size / 2,
         velocity: Vector2((rand.nextDouble() - 0.5) * width, height * 0.2)
@@ -75,7 +78,6 @@ class BrickBreaker extends FlameGame
         position: Vector2(width / 2, height * 0.95)));
 
     world.addAll([
-      // Add from here...
       for (var i = 0; i < brickColors.length; i++)
         for (var j = 1; j <= 5; j++)
           Brick(
@@ -86,6 +88,12 @@ class BrickBreaker extends FlameGame
             color: brickColors[i],
           ),
     ]);
+  }
+
+  @override
+  void onTap() {
+    super.onTap();
+    startGame();
   }
 
   @override

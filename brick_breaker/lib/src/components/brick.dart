@@ -11,8 +11,8 @@ class Brick extends RectangleComponent
     with CollisionCallbacks, HasGameReference<BrickBreaker> {
   Brick({required super.position, required Color color})
       : super(
-          anchor: Anchor.center,
           size: Vector2(brickWidth, brickHeight),
+          anchor: Anchor.center,
           paint: Paint()
             ..color = color
             ..style = PaintingStyle.fill,
@@ -24,6 +24,7 @@ class Brick extends RectangleComponent
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
     removeFromParent();
+    game.score.value++; // Add this line
 
     if (game.world.children.query<Brick>().length == 1) {
       game.playState = PlayState.won;
